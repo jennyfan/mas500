@@ -27,7 +27,7 @@ class mediacloudTest(unittest.TestCase):
 		logger.addHandler(ch)
 
 		# file handler
-		fh = logging.FileHandler(r'/Users/jennyfan/Documents/Harvard/log.txt')
+		fh = logging.FileHandler(r'/log.txt')
 		fh.setFormatter(formatter)
 		logger.addHandler(fh)
 
