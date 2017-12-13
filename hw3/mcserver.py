@@ -1,4 +1,4 @@
-import configparser, logging, datetime, os, json, dateutil.parser
+import configparser, datetime, os, json, dateutil.parser
 
 from flask import Flask, render_template, request
 
@@ -12,13 +12,36 @@ config = configparser.ConfigParser()
 config.read(os.path.join(basedir, 'settings.config'))
 
 ### set up logging
-logging.basicConfig(level=logging.DEBUG)
-logging.info("Starting the MediaCloud example Flask app!")
+# logging.basicConfig(level=logging.DEBUG)
+# logging.info("Starting the MediaCloud example Flask app!")
 
-### clean a mediacloud api client
-mc = mediacloud.api.MediaCloud( config.get('mediacloud','api_key') )
 
 app = Flask(__name__)
+
+## changing logging configuration
+if not app.debug and os.environ.get('HEROKU') is None:
+    import logging
+    from logging.handlers import RotatingFileHandler
+    file_handler = RotatingFileHandler('errors.log', 'a', 1 * 1024 * 1024, 10)
+    file_handler.setLevel(logging.INFO)
+    file_handler.setFormatter(logging.Formatter('%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]'))
+    app.logger.addHandler(file_handler)
+    app.logger.setLevel(logging.INFO)
+    app.logger.info('mediacloud app')
+
+if os.environ.get('HEROKU') is not None:
+    import logging
+    stream_handler = logging.StreamHandler()
+    app.logger.addHandler(stream_handler)
+    app.logger.setLevel(logging.INFO)
+    app.logger.info('mediacloud app')
+
+### changing mediacloud settings.config api_key to heroku
+heroku_api_key = os.environ.get('APIKEY')
+
+### clean a mediacloud api client
+mc = mediacloud.api.MediaCloud( heroku_api_key )
+# mc = mediacloud.api.MediaCloud( config.get('mediacloud','api_key') )
 
 
 @app.route("/")
@@ -79,3 +102,8 @@ def search_results():
 if __name__ == "__main__":
     app.debug = True
     app.run()
+
+# if __name__ == "__main__":
+#     #app.debug = True
+#     app.run(debug = True, host='0.0.0.0', port=8080, passthrough_errors=True)
+#     #app.run()
