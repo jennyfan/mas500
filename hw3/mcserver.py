@@ -1,4 +1,5 @@
-import configparser, datetime, os, json, dateutil.parser
+import configparser, datetime, os, json
+# import dateutil.parser
 
 from flask import Flask, render_template, request
 
@@ -38,7 +39,7 @@ if os.environ.get('HEROKU') is not None:
 
 ### changing mediacloud settings.config api_key to heroku
 heroku_api_key = os.environ.get('APIKEY')
-
+print(heroku_api_key)
 ### clean a mediacloud api client
 mc = mediacloud.api.MediaCloud( heroku_api_key )
 # mc = mediacloud.api.MediaCloud( config.get('mediacloud','api_key') )
@@ -68,7 +69,7 @@ def search_results():
     ### results['split'] has entries split by day/week
     ### gap automatically calculated depending on scope of time between start and end date
 
-    # print(json.dumps(results['split'], indent=4, separators=(',', ': ')))
+    print(json.dumps(results['split'], indent=4, separators=(',', ': ')))
     
     ### clean data
     weekData = []
@@ -82,10 +83,11 @@ def search_results():
 
         ### format date
         weekStr = key[:10]
-        d = dateutil.parser.parse(weekStr)
+        # d = dateutil.parser.parse(weekStr)
 
         ### push cleaned data to weekData in format for d3plus
-        weekDict["week"] = d.strftime('%Y-%m-%d')
+        # weekDict["week"] = d.strftime('%Y-%m-%d')
+        weekDict["week"] = d
         weekDict["value"] = results['split'][key]
         weekDict["name"] = keywords
         weekData.append(weekDict)

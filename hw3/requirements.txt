@@ -1,0 +1,4 @@
+flask
+requests[security]
+mediacloud
+gunicorn
