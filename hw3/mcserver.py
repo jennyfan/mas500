@@ -101,8 +101,3 @@ def search_results():
 if __name__ == "__main__":
     app.debug = True
     app.run()
-
-# if __name__ == "__main__":
-#     #app.debug = True
-#     app.run(debug = True, host='0.0.0.0', port=8080, passthrough_errors=True)
-#     #app.run()
