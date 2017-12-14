@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}Search Results{% endblock %}
+
+{% block content %}
+
+<div class="row">
+
+  <div class="col-md-12">
+  
+    <h3>Search Results</h3>
+
+    <p>You searched for "{{keywords}}"</p>
+
+    <p>In the US Mainstream Media online there have {{ sentenceCount }} sentences matching your search so far from {{split_start_date}} to {{split_end_date}}.</p>
+
+  </div>
+
+</div>  
+<div id="viz">
+
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+  
+  var weekData = {{ results|safe }};
+  console.log(weekData);
+
+  // instantiate d3plus
+  var visualization = d3plus.viz()
+    .container("#viz")  // container DIV to hold the visualization
+    .width(800)
+    .height(300)
+    .data(weekData)  // data to use with the visualization
+    .type("line")       // visualization type
+    .id("name")         // key for which our data is unique on
+    .text("value")       // key to use for display text
+    .y("value")         // key to use for y-axis
+    .x("week")          // key to use for x-axis
+    .draw()             // finally, draw the visualization!
+    
+</script>
+
+{% endblock %}

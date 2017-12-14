@@ -1,0 +1,9 @@
+flask
+requests[security]
+mediacloud
+gunicorn
+configparser
+datetime
+os
+json
+dateutil
